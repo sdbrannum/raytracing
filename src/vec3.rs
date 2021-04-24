@@ -1,23 +1,24 @@
-use std::ops::{Add, Div, Index, Mul, Sub};
+use std::ops::{Add, Div, Mul, Sub};
 
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
-    e: Vec<f32>,
+    e: [f32; 3],
 }
 
 impl Vec3 {
     pub fn new(e0: f32, e1: f32, e2: f32) -> Vec3 {
-        Vec3 {
-            e: vec![e0, e1, e2],
-        }
+        Vec3 { e: [e0, e1, e2] }
     }
 
     pub fn make_unit_vector(&mut self) {
-        let k: f32 =
-            1.0 / (self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]).sqrt();
+        let k: f32 = 1.0 / self.length();
         self.e[0] *= k;
         self.e[1] *= k;
         self.e[2] *= k;
+    }
+
+    pub fn unit_vector(v: Vec3) -> Vec3 {
+        v / v.length()
     }
 
     pub fn dot(&self, v2: Vec3) -> f32 {
@@ -40,6 +41,24 @@ impl Vec3 {
     }
     pub fn b(&self) -> f32 {
         self.e[2]
+    }
+
+    pub fn x(&self) -> f32 {
+        self.e[0]
+    }
+    pub fn y(&self) -> f32 {
+        self.e[1]
+    }
+    pub fn z(&self) -> f32 {
+        self.e[2]
+    }
+
+    pub fn length(&self) -> f32 {
+        self.squared_length().sqrt()
+    }
+
+    pub fn squared_length(self) -> f32 {
+        self.e[0] * self.e[0] + self.e[1] * self.e[1] + self.e[2] * self.e[2]
     }
 }
 
